@@ -1,0 +1,547 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail Management Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+   <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+        }
+
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #2b5876, #4e4376);
+            padding-top: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar:hover {
+            width: 270px;
+        }
+
+        .sidebar h3 {
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .sidebar .nav-link {
+            color: #ddd;
+            font-weight: 500;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            transition: margin-left 0.3s ease;
+        }
+
+        .navbar {
+            border-bottom: 2px solid #ddd;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #main-content {
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar h3 {
+                display: none;
+            }
+
+            .sidebar .nav-link {
+                justify-content: center;
+                padding: 10px;
+            }
+
+            .sidebar .nav-link i {
+                margin-right: 0;
+            }
+
+            .content-area {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+            }
+        }
+
+        h2 {
+            font-weight: bold; 
+            color: #333;
+            text-align: center; 
+            margin-bottom: 10px; 
+            font-size: 80px; 
+        }
+
+        h4 {
+            font-size: 30px;  
+            font-weight: bold; 
+            color: #555;  
+            text-align: center; 
+            margin-top: 0px; 
+            margin-bottom: 30px; 
+            font-family: Arial, sans-serif; 
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            text-align: center;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 260px;
+            height: 380px; /* Adjusted height for better proportions */
+            margin: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px; /* Adjusted to ensure full image display */
+            object-fit: contain; /* Ensures the entire image fits without cropping */
+            background-color: #f8f9fa; /* Adds a light background if the image has transparency */
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .card button {
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .card button:hover {
+            background-color: #e55340;
+        }
+        
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <h3>Retail Dashboard</h3>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="Dashboard.html" onclick="loadPage('Dashboard.html', this)">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="loadPage('product-list.html', this)">
+                        <i class="fas fa-list"></i> Product List
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="view-cart.html"  onclick="view-cart.html" >
+                        <i class="fas fa-cart-plus"></i> View Cart
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="loadPage('history-purchase.html', this)">
+                        <i class="fas fa-history"></i> History Purchase
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="loadPage('orders-now.html', this)">
+                        <i class="fas fa-truck"></i> Orders Now
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="WelcomeRetail.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="content-area">
+            <div id="main-content">
+                <h2>Welcome to the Retail Dashboard</h2>
+                <h4>Browse and select your products in the Product section to begin your journey!</h4>
+                <h4>🛒 Happy Shopping! 😊</h4>
+                 <div class="row">
+                 
+                <!-- Toast for success message -->
+<div id="toast-container" class="position-fixed Left top-0 end-0 p-3">
+    <div id="toast" class="toast text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">Product added to cart successfully!</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+                    <!-- Repeat this card structure for each product -->
+                   <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7_drU9l6a4VnbCrch0lfuvDq3tfWnAMPVaw&s" alt="Product 1">
+                            <div class="card-body">
+                                <h3 class="card-title">Product 1</h3>
+                                <p><strong>Product Name:</strong> Sprite</p>
+                                <p><strong>Price:</strong> 40.00</p>
+                                <button onclick="addToCart(1, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTte0xIh8Am6X_no0zVykL2SzOYJHxBfYresA&s" alt="Product 2">
+                            <div class="card-body">
+                                <h3 class="card-title">Product 2</h3>
+                                <p><strong>Product Name:</strong>Toor Dal</p>
+                                <p><strong>Price:</strong> 65.00</p>
+                                <button onclick="addToCart(2, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5bxlCMF4aB0VT9YDqAvtCuyAzDgvY0meClA&s" alt="Product 3">
+                            <div class="card-body">
+                                <h3 class="card-title">Product 3</h3>
+                                <p><strong>Product Name:</strong> Tata Salt</p>
+                                <p><strong>Price:</strong> 40.00</p>
+                                <button onclick="addToCart(3, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPHu7RzvJzjeRrPSx-CpLAIfqxR7PEaedONA&s" alt="Product 4">
+                            <div class="card-body">
+                                <h3 class="card-title">Product 4</h3>
+                                <p><strong>Product Name:</strong> Lux International Soap </p>
+                                <p><strong>Price:</strong> 75.00</p>
+                               <button onclick="addToCart(4, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgDbkHmoTV6royRX2EK2lm6yycEz5mPqzF_Q&s" alt="Product 5">
+                            <div class="card-body">
+                                <h3 class="card-title">Product 5</h3>
+                                <p><strong>Product Name:</strong> CloseUp Toothpaste </p>
+                                <p><strong>Price:</strong> 30.00</p>
+                               <button onclick="addToCart(5, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGDzqK3qIxbmFRjyORMPDeq63CgWTVrFTfcQ&s" alt="Product 6">
+                            <div class="card-body">
+                                <h3 class="card-title">Product 6</h3>
+                                <p><strong>Product Name:</strong> Oil </p>
+                                <p><strong>Price:</strong> 156.00</p>
+                             <button onclick="addToCart(6, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNP5MYEL8DtUUcul_S08CtPZ15GyCzerTQ4g&s" alt="Product 7">
+                            <div class="card-body">
+                                <h3 class="card-title">Product 7</h3>
+                                <p><strong>Product Name:</strong> Ice Cream </p>
+                                <p><strong>Price:</strong> 50.00</p>
+                               <button onclick="addToCart(7, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4Z-zpAx7AhKL-IlF8GeDivEv4xrGO0n__Lw&s" alt="Product 8">
+                            <div class="card-body">
+                                <h3 class="card-title">Product 8</h3>
+                                <p><strong>Product Name:</strong> Milk 1Liter</p>
+                                <p><strong>Price:</strong> 80.00</p>
+                               <button onclick="addToCart(8, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAPnDc0yaoRKnnWwzEsMqyB6NsUGLuXDe5cQ&s" alt="Product 9">
+                            <div class="card-body">
+                                <h3 class="card-title">Product 9</h3>
+                                <p><strong>Product Name:</strong> Rice Bag (25 Kg)</p>
+                                <p><strong>Price:</strong> 980.00</p>
+                               <button onclick="addToCart(9, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2uXRotoR1UtMk7IxpbxDUv2WPm9Iot0JcSw&s" alt="Product 10">
+                            <div class="card-body">
+                                <h3 class="card-title">Product 10</h3>
+                                <p><strong>Product Name:</strong> Lays </p>
+                                <p><strong>Price:</strong> 22.00</p>
+                               <button onclick="addToCart(10, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmf98911_HicZhz36Zes4mEBM3DV5YOH6udQ&s" alt="Product 11">
+                            <div class="card-body">
+                                <h3 class="card-title">Product 11</h3>
+                                <p><strong>Product Name:</strong> Peanuts 1Kg</p>
+                                <p><strong>Price:</strong> 76.00</p>
+                               <button onclick="addToCart(11, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScz4zjMYst-LqYppbn5iFAjOcc7FwCeIzqzQ&s" alt="Product 12">
+                            <div class="card-body">
+                                <h3 class="card-title">Product 12</h3>
+                                <p><strong>Product Name:</strong> Biscuit </p>
+                                <p><strong>Price:</strong> 32.00</p>
+                               <button onclick="addToCart(12, 1)">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+     
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Load initial content (Dashboard)
+            loadPage('Dashboard.html', document.querySelector('.nav-link[href="#"]')); // Select the Dashboard link
+        });
+
+
+        function loadPage(page, element) {
+            let content = "";
+
+            if (page === 'Dashboard.html') {
+                content = `<h2>Welcome to the Retail Dashboard</h2>
+                <h4>Browse and select your products in the Product section to begin your journey!</h4>
+                <h4>🛒 Happy Shopping! 😊</h4>
+                <div class="row">
+                
+               
+                    </div>`;
+            } else if (page === 'product-list.html') {
+                content = `<h3>Product List</h3>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Expire Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        </tbody>
+                </table>`;
+            } else if (page === 'history-purchase.html') {
+                content = `<h2>History Purchase</h2>
+                `;
+            }
+            else if (page === 'view-cart.html') {
+                content = `<h2>Add to Cart</h2>
+                
+                `;
+            }
+            else if (page === 'orders-now.html') {
+                content = `<h2>Orders Now</h2>
+                `;
+            }
+            else {
+                content = "Content not found.";
+            }
+
+
+            document.getElementById('main-content').innerHTML = content;
+            window.history.pushState({ page: page }, "", page);
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            element.classList.add('active');
+
+            if (page === 'product-list.html') {
+                fetchProducts();
+            }
+        }
+
+        function fetchProducts() {
+            $.ajax({
+                url: "ProductListServlet",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    let tableBody = $("#productTableBody");
+                    tableBody.empty();
+                    data.forEach(product => {
+                        tableBody.append(
+                            `<tr>
+                                <td class="product-id">${product.ProductID}</td>
+                                <td>${product.ProductName}</td>
+                                <td>${product.Price.toFixed(2)}</td>
+                                <td>${product.Quantity}</td>
+                                <td>${product.ExpireDate}</td>
+                            </tr>`
+                        );
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        } 
+        
+        
+        
+        function showToast(message) {
+            const toastEl = document.getElementById("toast");
+            const toastBody = toastEl.querySelector(".toast-body");
+            toastBody.textContent = message;
+
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+
+ 
+        function addToCart(productID, quantity) {
+            $.ajax({
+                url: "AddToCartServlet",
+                type: "POST",
+                data: {
+                    productID: productID,
+                    quantity: quantity
+                },
+                success: function(response) {
+                    showToast("Product added to cart successfully!"); // Show Bootstrap toast alert
+                },
+                error: function(xhr, status, error) {
+                    showToast("Error adding product to cart.");
+                }
+            });
+        }
+
+
+       
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+</body>
+
+</html>

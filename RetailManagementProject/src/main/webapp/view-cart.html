@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .cart-item-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .cart-item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-item button {
+            margin-left: 10px;
+        }
+        .total-section {
+            background-color: #e9ecef;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .clear-cart-btn {
+            background-color: #dc3545;
+            color: white;
+            font-weight: bold;
+            border-radius: 20px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+        .clear-cart-btn:hover {
+            background-color: #c82333;
+            cursor: pointer;
+        }
+        .cart-item-price {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4" style="color: #343a40;">Your Cart</h2>
+        <div id="cart-content">
+            <div id="cart-list">
+                <!-- Cart items will be dynamically inserted here -->
+            </div>
+            <div class="total-section d-flex justify-content-between align-items-center">
+                
+                <h3> Total: ₹ <span id="cart-total">0</span></h3>
+                <button onclick="clearCart()" class="clear-cart-btn">Clear Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Function to fetch and display cart items
+        function updateCartDisplay() {
+            $.ajax({
+                url: "ViewCartServlet", // Servlet to fetch cart items
+                type: "GET",
+                success: function(data) {
+                    let cartList = $("#cart-list");
+                    cartList.empty(); // Clear previous items
+                    let total = 0;
+
+                    // Loop through the cart items and display them
+                    data.forEach(item => {
+                        cartList.append(
+                            `<div class="cart-item-card">
+                                <div class="cart-item">
+                                    <div>
+                                        <h5>${item.productName}</h5>
+                                        <p class="cart-item-price"> Price ₹${item.price} x Quantity ${item.quantity}</p>
+                                    </div>
+                                    <button onclick="removeItem(${item.cartID})" class="btn btn-warning btn-sm">Remove</button>
+                                </div>
+                            </div>`
+                        );
+                        total += item.price * item.quantity; // Calculate total
+                    });
+
+                    $("#cart-total").text(total.toFixed(2)); // Update total
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching cart items:", error);
+                }
+            });
+        }  
+
+        // Function to remove an item from the cart
+        function removeItem(cartID) {
+            $.ajax({
+                url: "RemoveCartItemServlet", // Servlet to remove an item
+                type: "POST",
+                data: { cartID: cartID },
+                success: function(response) {
+                    alert(response); // Show success message
+                    updateCartDisplay(); // Refresh the cart display
+                },
+                error: function(xhr, status, error) {
+                    alert("Error removing item.");
+                }
+            });
+        }
+
+        // Function to clear the cart
+        function clearCart() {
+            $.ajax({
+                url: "/RetailManagementProject/ClearCartServlet", // Servlet to clear the cart
+                type: "POST",
+                success: function(response) {
+                    alert(response); // Show success message
+                    updateCartDisplay(); // Refresh the cart display
+                },
+                error: function(xhr, status, error) {
+                    alert("Error clearing cart.");
+                }
+            });
+        }
+
+        // Load cart items when the page loads
+        $(document).ready(function() {
+            updateCartDisplay();
+        });
+    </script>
+</body>
+</html>
