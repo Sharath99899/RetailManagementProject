@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <style>
+        .table th, .table td { vertical-align: middle; }
+        .table .product-id { font-weight: bold; color: #007bff; }
+        .table .btn { border-radius: 8px; }
+        .container { max-width: 1000px; }
+        h3 { text-align: center; color: #343a40; }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+    <h3>Product List</h3>
+    <table class="table table-bordered table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Expire Date</th>
+            </tr>
+        </thead>
+        <tbody id="productTableBody" >
+            <!-- Data will be inserted here dynamically -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        fetchProducts();
+    });
+
+    function fetchProducts() {
+        $.ajax({
+            url: "ProductListServlet",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                let tableBody = $("#productTableBody");
+                tableBody.empty();
+                data.forEach(product => {
+                    tableBody.append(`
+                        <tr>
+                            <td class="product-id">${product.ProductID}</td>
+                            <td>${product.ProductName}</td>
+                            <td>${product.Price.toFixed(2)}</td>
+                            <td>${product.Quantity}</td>
+                            <td>${product.ExpireDate}</td>
+                        </tr>
+                    `);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

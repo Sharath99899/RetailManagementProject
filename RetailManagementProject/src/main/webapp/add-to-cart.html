@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add to Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card { margin-top: 20px; }
+        .btn-success { background-color: #28a745; color: white; border-radius: 5px; }
+        .btn-success:hover { background-color: #218838; }
+        .container { max-width: 1200px; }
+        .card-title { font-size: 1.25rem; font-weight: bold; }
+        .card-text { font-size: 1rem; }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h3 class="text-center">Add to Cart</h3>
+        <div class="row">
+            
+            <div id="cart-content">
+    <h2>Your Cart</h2>
+    <ul id="cart-list"></ul>
+    <h3>Total: ₹<span id="cart-total">0</span></h3>
+    <button onclick="clearCart()">Clear Cart</button>
+</div>
+
+<script>
+function loadCart() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cartList = document.getElementById("cart-list");
+    let cartTotal = document.getElementById("cart-total");
+
+    cartList.innerHTML = ""; // Clear previous list
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        let listItem = document.createElement("li");
+        listItem.innerHTML = `${item.name} - ₹${item.price} x ${item.quantity} 
+            <button onclick="removeItem(${index})">Remove</button>`;
+        cartList.appendChild(listItem);
+        total += item.price * item.quantity;
+    });
+
+    cartTotal.innerText = total.toFixed(2);
+}
+
+function removeItem(index) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    loadCart();
+}
+
+function clearCart() {
+    localStorage.removeItem("cart");
+    loadCart();
+}
+
+// Load cart when page opens
+loadCart();
+</script>
+            
+            
+            
+            
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
