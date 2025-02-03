@@ -1,201 +1,6 @@
-CREATE DATABASE JavaIsoft_DB;
-
-USE JavaIsoft_DB;
-CREATE TABLE Cars (
-    carId INT AUTO_INCREMENT PRIMARY KEY,
-    carName VARCHAR(100),
-    brand VARCHAR(100),
-    yearOfManufacture INT,
-    fuelType VARCHAR(50),
-    transmissionType VARCHAR(50),
-    engineCapacity INT,
-    price DOUBLE,
-    color VARCHAR(50)
-);
-SELECT * FROM Cars;
-drop table Cars;
-
--------------------------------------------------------------------------------------------------------------------------------------------------
-
-USE JavaIsoft_DB;
-CREATE TABLE PersonData 
-(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    age INT,
-    bloodGroup VARCHAR(5),
-    number VARCHAR(10),
-    email VARCHAR(100)
-);
-SELECT * FROM PersonData;
-drop table PersonData;
-
--------------------------------------------------------------------------------------------------------------------------------------------------
-
-USE JavaIsoft_DB;
-CREATE TABLE StudentTable (
-    studentId INT AUTO_INCREMENT PRIMARY KEY,
-    studentName VARCHAR(255),
-    age INT,
-    email VARCHAR(255),
-    phone VARCHAR(15),
-    fee DECIMAL(10, 2)
-);
-SELECT * FROM StudentTable;
-drop table StudentTable;
-
--------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-USE JavaIsoft_DB;
-CREATE TABLE Country (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
-);
-CREATE TABLE State (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    country_id INT,
-    FOREIGN KEY (country_id) REFERENCES Country(id) ON DELETE CASCADE
-);
-INSERT INTO Country (name) VALUES 
-('India'), 
-('USA'), 
-('Canada'),
-('UK'),
-('Australia');
-INSERT INTO State (name, country_id) VALUES
--- States for India
-('Telangana', 1),
-('Karnataka', 1),
-('Andhra Pradesh', 1),
-('Tamil Nadu', 1),
-('Uttar Pradesh', 1),
--- States for USA
-('California', 2),
-('Texas', 2),
-('New York', 2),
-('Florida', 2),
-('Illinois', 2),
--- States for Canada
-('Ontario', 3),
-('Quebec', 3),
-('British Columbia', 3),
-('Alberta', 3),
-('Nova Scotia', 3),
--- States for UK
-('England', 4),
-('Scotland', 4),
-('Wales', 4),
-('Northern Ireland', 4),
-('Cornwall', 4),
--- States for Australia
-('New South Wales', 5),
-('Queensland', 5),
-('Victoria', 5),
-('South Australia', 5),
-('Western Australia', 5);
-SELECT * FROM Country;
-SELECT * FROM State;
-Drop table Country;
-Drop table State;
-
--------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-CREATE DATABASE StudentManagement;
-USE StudentManagement;
-CREATE TABLE Country (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
-);
-CREATE TABLE State (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    country_id INT,
-    FOREIGN KEY (country_id) REFERENCES Country(id) ON DELETE CASCADE
-);
-INSERT INTO Country (name) VALUES 
-('India'), 
-('USA'), 
-('Canada'),
-('UK'),
-('Australia');
-INSERT INTO State (name, country_id) VALUES
--- States for India
-('Telangana', 1),
-('Karnataka', 1),
-('Andhra Pradesh', 1),
-('Tamil Nadu', 1),
-('Uttar Pradesh', 1),
--- States for USA
-('California', 2),
-('Texas', 2),
-('New York', 2),
-('Florida', 2),
-('Illinois', 2),
--- States for Canada
-('Ontario', 3),
-('Quebec', 3),
-('British Columbia', 3),
-('Alberta', 3),
-('Nova Scotia', 3),
--- States for UK
-('England', 4),
-('Scotland', 4),
-('Wales', 4),
-('Northern Ireland', 4),
-('Cornwall', 4),
--- States for Australia
-('New South Wales', 5),
-('Queensland', 5),
-('Victoria', 5),
-('South Australia', 5),
-('Western Australia', 5);
-
--- Create Registration Table for storing user registration data
-CREATE TABLE registration (
-    student_id INT AUTO_INCREMENT PRIMARY KEY,
-    student_name VARCHAR(255) NOT NULL,
-    student_age INT NOT NULL,
-    student_gender VARCHAR(50) NOT NULL,
-    student_phone VARCHAR(15),
-    student_blood_group ENUM('O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-') NOT NULL, 
-    student_email VARCHAR(255) UNIQUE NOT NULL,
-    student_password VARCHAR(255) NOT NULL
-);
--- Create Dashboard Table for storing additional student data
-CREATE TABLE dashboard (
-    student_id INT PRIMARY KEY,
-    student_name VARCHAR(255),
-    student_age INT,
-    student_gender VARCHAR(50),
-    student_dob DATE,
-    student_phone VARCHAR(15),
-    student_date_of_joining DATE,
-    student_fee DECIMAL(10, 2),
-    student_branch VARCHAR(50),
-    student_country INT,
-    student_state INT,
-    student_address TEXT,
-    FOREIGN KEY (student_country) REFERENCES Country(id),
-    FOREIGN KEY (student_state) REFERENCES State(id)
-);
-
-SELECT * FROM Country;
-SELECT * FROM State;
-SELECT * FROM registration;
-SELECT * FROM dashboard;
-
-Drop table Country;
-Drop table State;
-drop table registration;
-drop table dashboard;
-
-
--------------------------------------------------------------------------------------------------------------------------------------------------
--- Retail Management Project DataBase ----
-USE JavaIsoft_DB;
+-- RetailManagementProject Database--
+Create database Retail_DB;
+use Retail_DB;
 
 CREATE TABLE Users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -232,27 +37,37 @@ INSERT INTO ProductList (ProductName, Price, Quantity, ExpireDate) VALUES
 ('CloseUp Toothpaste', 30.00, 100, '2025-12-31'),
 (' Oil', 156.00, 200, '2024-11-30'),
 ('Ice Cream', 50.00, 100, '2025-12-31'),
-('Milk 1Liter', 85.00, 200, '2024-11-30'),
-('Rice Bag (25 Kg)', 980.00, 50, '2023-12-31'),
-(' Lays', 22.00, 150, '2024-01-30'),
-('Peanuts 1Kg', 76.00, 30, '2024-12-31'),
-('Biscuit', 32.00, 600, '2025-01-30');
+('Milk 1Liter', 85.00, 200, '2024-11-30');
 
 
 SELECT * FROM ProductList;
-TRUNCATE TABLE ProductList;
-DROP TABLE ProductList;
 
-
-CREATE TABLE cart (
-    CartID INT AUTO_INCREMENT PRIMARY KEY,
-    ProductID INT NOT NULL,
-    Quantity INT NOT NULL,
-    UserID INT NOT NULL, -- Assuming you have user authentication
-    FOREIGN KEY (ProductID) REFERENCES ProductList(ProductID)
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    image_url VARCHAR(255) NOT NULL
 );
 
+INSERT INTO products (name, price, image_url) VALUES
+('Sprite', 40.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7_drU9l6a4VnbCrch0lfuvDq3tfWnAMPVaw&s'),
+('Toor Dal', 65.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTte0xIh8Am6X_no0zVykL2SzOYJHxBfYresA&s'),
+('Lux International Soap', 70.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPHu7RzvJzjeRrPSx-CpLAIfqxR7PEaedONA&s'),
+('CloseUp Toothpaste', 37.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgDbkHmoTV6royRX2EK2lm6yycEz5mPqzF_Q&s'),
+('Milk', 45.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4Z-zpAx7AhKL-IlF8GeDivEv4xrGO0n__Lw&s'),
+('Oil', 150.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGDzqK3qIxbmFRjyORMPDeq63CgWTVrFTfcQ&s'),
+('Ice Cream', 50.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNP5MYEL8DtUUcul_S08CtPZ15GyCzerTQ4g&s'),
+('Tata Salt', 38.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5bxlCMF4aB0VT9YDqAvtCuyAzDgvY0meClA&s');
+
+SELECT * FROM products;
 
 SELECT * FROM cart;
 TRUNCATE TABLE cart;
 DROP TABLE cart;
+
+CREATE TABLE cart (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_name VARCHAR(255) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    quantity INT NOT NULL
+);
