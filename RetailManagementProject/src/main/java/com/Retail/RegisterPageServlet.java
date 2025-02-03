@@ -14,9 +14,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @WebServlet("/RegisterPageServlet")
 public class RegisterPageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    
+    // Create Logger instance
+    private static final Logger logger = LogManager.getLogger(RegisterPageServlet.class);
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -33,11 +39,13 @@ public class RegisterPageServlet extends HttpServlet {
         String state = request.getParameter("State");
         String country = request.getParameter("Country");
         String postalCode = request.getParameter("PostalCode");
-        
+
         PrintWriter out = response.getWriter();
         String jsonResponse = "";
 
         try (Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Retail_DB", "root", "root")) {
+
+            logger.info("Connecting to the database");
 
             String checkEmailQuery = "SELECT * FROM Users WHERE Email = ?";
             PreparedStatement checkEmailStmt = con.prepareStatement(checkEmailQuery);
@@ -47,6 +55,7 @@ public class RegisterPageServlet extends HttpServlet {
             if (rs.next()) {
 
                 jsonResponse = "{\"status\": \"error\", \"message\": \"Email already exists\"}";
+                logger.warn("Email already exists: {}", email);
             } else {
 
                 String query = "INSERT INTO Users (FirstName, LastName, Gender, PhoneNumber, Email, Password, City, State, Country, PostalCode) "
@@ -65,19 +74,18 @@ public class RegisterPageServlet extends HttpServlet {
 
                 int result = pst.executeUpdate();
                 if (result > 0) {
-                  
                     jsonResponse = "{\"status\": \"success\", \"message\": \"Registration successful\"}";
+                    logger.info("Registration successful for email: {}", email);
                 } else {
-                   
                     jsonResponse = "{\"status\": \"error\", \"message\": \"Registration failed\"}";
+                    logger.error("Registration failed for email: {}", email);
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("SQL error occurred: {}", e.getMessage(), e);
             jsonResponse = "{\"status\": \"error\", \"message\": \"Internal Server Error\"}";
         }
 
-       
         out.print(jsonResponse);
         out.flush();
     }
