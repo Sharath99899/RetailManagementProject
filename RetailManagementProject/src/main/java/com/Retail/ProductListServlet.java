@@ -34,9 +34,9 @@ public class ProductListServlet extends HttpServlet {
         ResultSet rs = null;
 
         try {
-            String jdbcURL = "jdbc:mysql://localhost:3306/Retail_DB";
+            String jdbcURL = "jdbc:mysql://127.0.0.1:3306/Retail_DB";
             String dbUser = "root";
-            String dbPassword = "teja@929";
+            String dbPassword = "root";
 
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);

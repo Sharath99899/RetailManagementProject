@@ -37,7 +37,7 @@ public class RegisterPageServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String jsonResponse = "";
 
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Retail_DB", "root", "teja@929")) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Retail_DB", "root", "root")) {
 
             String checkEmailQuery = "SELECT * FROM Users WHERE Email = ?";
             PreparedStatement checkEmailStmt = con.prepareStatement(checkEmailQuery);

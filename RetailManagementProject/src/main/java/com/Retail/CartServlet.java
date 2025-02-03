@@ -27,9 +27,9 @@ class CartItem {
 public class CartServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/Retail_DB";
+    private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/Retail_DB";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "teja@929";
+    private static final String DB_PASS = "root";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
