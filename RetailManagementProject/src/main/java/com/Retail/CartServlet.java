@@ -61,6 +61,7 @@ public class CartServlet extends HttpServlet {
                     updateStmt.executeUpdate();
                     logger.info("Product {} updated in cart with new quantity: {}", productName, quantity);
                 } else {
+                	
                     String insertQuery = "INSERT INTO cart (product_name, price, quantity) VALUES (?, ?, ?)";
                     PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
                     insertStmt.setString(1, productName);

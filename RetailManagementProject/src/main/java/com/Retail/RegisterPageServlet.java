@@ -56,7 +56,7 @@ public class RegisterPageServlet extends HttpServlet {
 
                 jsonResponse = "{\"status\": \"error\", \"message\": \"Email already exists\"}";
                 logger.warn("Email already exists: {}", email);
-            } else {
+            } else { 
 
                 String query = "INSERT INTO Users (FirstName, LastName, Gender, PhoneNumber, Email, Password, City, State, Country, PostalCode) "
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

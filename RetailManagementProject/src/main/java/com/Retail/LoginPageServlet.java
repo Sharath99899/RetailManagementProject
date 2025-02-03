@@ -33,6 +33,7 @@ public class LoginPageServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
+        
         // Initialize the response and print writer
         PrintWriter out = response.getWriter();
         String jsonResponse = "";
