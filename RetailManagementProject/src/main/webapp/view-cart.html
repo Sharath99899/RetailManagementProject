@@ -66,7 +66,7 @@
             <div class="total-section d-flex justify-content-between align-items-center">
                 
                 <h3> Total: ₹ <span id="cart-total">0</span></h3>
-                <button onclick="clearCart()" class="clear-cart-btn">Clear Cart</button>
+                
             </div>
         </div>
     </div>
@@ -114,7 +114,7 @@
                 type: "POST",
                 data: { cartID: cartID },
                 success: function(response) {
-                    alert(response); // Show success message
+                  //  alert(response); // Show success message
                     updateCartDisplay(); // Refresh the cart display
                 },
                 error: function(xhr, status, error) {

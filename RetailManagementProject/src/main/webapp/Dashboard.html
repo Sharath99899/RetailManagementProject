@@ -235,12 +235,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="loadPage('history-purchase.html', this)">
-                        <i class="fas fa-history"></i> History Purchase
-                    </a>
-                </li>
-                
-                <li class="nav-item">
                     <a class="nav-link" href="#" onclick="loadPage('orders-now.html', this)">
                         <i class="fas fa-truck"></i> Orders Now
                     </a>
@@ -249,17 +243,8 @@
                     <a class="nav-link" href="WelcomeRetail.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </li>
             </ul>
-        </div>
-
-        <div class="content-area">
-            <div id="main-content">
-                <h2>Welcome to the Retail Dashboard</h2>
-                <h4>Browse and select your products in the Product section to begin your journey!</h4>
-                <h4>🛒 Happy Shopping! 😊</h4>
-                 <div class="row">
-                 
-                <!-- Toast for success message -->
-<div id="toast-container" class="position-fixed Left top-0 end-0 p-3">
+        </div><!-- Toast for success message -->
+    <div id="toast-container" class="position-fixed Left top-0 end-0 p-3">
     <div id="toast" class="toast text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
             <div class="toast-body">Product added to cart successfully!</div>
@@ -267,6 +252,13 @@
         </div>
     </div>
 </div>
+
+        <div class="content-area">
+            <div id="main-content">
+                <h2>Welcome to the Retail Dashboard</h2>
+                <h4>Browse and select your products in the Product section to begin your journey!</h4>
+                <h4>🛒 Happy Shopping! 😊</h4>
+                 <div class="row">
 
                     <!-- Repeat this card structure for each product -->
                    <div class="col-md-3 mb-4">
@@ -452,21 +444,11 @@
                     <tbody id="productTableBody">
                         </tbody>
                 </table>`;
-            } else if (page === 'history-purchase.html') {
-                content = `<h2>History Purchase</h2>
-                `;
             }
-            else if (page === 'view-cart.html') {
-                content = `<h2>Add to Cart</h2>
-                
-                `;
-            }
+            
             else if (page === 'orders-now.html') {
                 content = `<h2>Orders Now</h2>
                 `;
-            }
-            else {
-                content = "Content not found.";
             }
 
 
@@ -534,8 +516,6 @@
                 }
             });
         }
-
-// This the updated code 
        
     </script>
 
