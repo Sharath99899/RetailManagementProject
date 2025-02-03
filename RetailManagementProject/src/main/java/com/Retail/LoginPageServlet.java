@@ -32,6 +32,7 @@ public class LoginPageServlet extends HttpServlet {
         // Get the login credentials from the request
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        
 
         
         // Initialize the response and print writer

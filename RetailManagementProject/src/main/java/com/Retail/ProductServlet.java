@@ -69,6 +69,7 @@ public class ProductServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.print(json);
         out.flush();
+        
  
         logger.info("Sent response with {} products", products.size());
     }

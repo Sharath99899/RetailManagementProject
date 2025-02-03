@@ -60,7 +60,7 @@ public class CartServlet extends HttpServlet {
                     updateStmt.setString(2, productName);
                     updateStmt.executeUpdate();
                     logger.info("Product {} updated in cart with new quantity: {}", productName, quantity);
-                } else {
+                } else { 
                 	
                     String insertQuery = "INSERT INTO cart (product_name, price, quantity) VALUES (?, ?, ?)";
                     PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
