@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail Management Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+        }
+
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #2b5876, #4e4376);
+            padding-top: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar:hover {
+            width: 270px;
+        }
+
+        .sidebar h3 {
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .sidebar .nav-link {
+            color: #ddd;
+            font-weight: 500;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            transition: margin-left 0.3s ease;
+        }
+
+        .navbar {
+            border-bottom: 2px solid #ddd;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #main-content {
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar h3 {
+                display: none;
+            }
+
+            .sidebar .nav-link {
+                justify-content: center;
+                padding: 10px;
+            }
+
+            .sidebar .nav-link i {
+                margin-right: 0;
+            }
+
+            .content-area {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+            }
+        }
+
+        h2 {
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 80px;
+        }
+
+        h4 {
+            font-size: 30px;
+            font-weight: bold;
+            color: #555;
+            text-align: center;
+            margin-top: 0px;
+            margin-bottom: 30px;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            text-align: center;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 260px;
+            height: 380px;
+            margin: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: contain;
+            background-color: #f8f9fa;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .card button {
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .card button:hover {
+            background-color: #e55340;
+        }
+
+        .product-list {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .product {
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart {
+            max-width: 400px;
+            margin: 20px auto;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+        }
+
+        .remove-btn, #clear-cart {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        #clear-cart {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 45%;
+            margin-top: 10px;
+            padding: 10px;
+        }
+
+        /* Alert Container CSS */
+        #alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            width: 300px;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border-color: #ffeeba;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .btn-close {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar Menu -->
+        <div class="sidebar">
+            <h3>Retail Dashboard</h3>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="Dashboard.html" onclick="location.reload();">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="fetchProducts()">
+                        <i class="fas fa-list"></i> Product List
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="viewCart()" onclick="location.reload();">
+                        <i class="fas fa-cart-plus"></i>View Cart
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="loadOrders()">
+                        <i class="fas fa-truck"></i> Orders Now
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="WelcomeRetail.html">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="content-area">
+            <!-- Alert Container -->
+            <div id="alert-container"></div>
+
+            <!-- Cart Display Section -->
+            <div id="cart-section" class="container mt-5 d-none">
+                <h2 class="text-center mb-4" style="color: #343a40;">Your Cart</h2>
+                <ul id="cart-items"></ul>
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <p><strong>Total: ₹<span id="total-price">0</span></strong></p>
+                    <button id="clear-cart">Clear Cart</button>
+                </div>
+            </div>
+
+            <!-- Dashboard onload display section -->
+            <div id="main-content">
+                <h2>Welcome to the Retail Dashboard</h2>
+                <h4>Browse and select your products in the Product section to begin your journey!</h4>
+                <h4>🛒 Happy Shopping! 😊</h4>
+
+                <div class="row" id="product-list">
+                    <!-- Products will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Product list Display Section -->
+            <div class="container mt-5 d-none" id="product-list-container">
+                <h3>Product List</h3>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Expire Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        <!-- Products will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            
+           <!-- Order Display Section -->
+<div class="container mt-5 d-none" id="order-section">
+    <h3 class="text-center mb-4">Order Details</h3>
+    <div id="order-alert" class="d-none"></div>
+    <table class="table table-bordered table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody id="orderTableBody">
+            <!-- Orders will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <!-- Payment Button -->
+    <div class="d-flex justify-content-center mt-4">
+        <button id="pay-now" class="btn btn-success">Pay Now</button>
+        
+    </div>
+
+    <!-- Order Success Message -->
+    <div id="order-success" class="alert alert-success mt-3 d-none">
+        Order placed successfully! Thank you for shopping with us. 😊
+    </div>
+</div>
+
+            
+            
+            
+        </div>
+    </div>
+
+    <script>
+        // Function to show Bootstrap alert
+        function showAlert(message, type) {
+            const alertContainer = $('#alert-container');
+            const alert = $(`
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `);
+            alertContainer.append(alert);
+            setTimeout(() => alert.alert('close'), 2000); // Auto-close after 3 seconds
+        }
+
+        // Add to cart button function
+        function addToCart(productName, price) {
+            $.post("CartServlet", {
+                productName: productName,
+                price: price
+            }, function () {
+                showAlert(`${productName} added to cart!`, 'success');
+                updateCartDisplay();
+            });
+        }
+
+        // Remove from cart function
+        function removeFromCart(productName) {
+            $.post("CartServlet", {
+                removeProduct: productName
+            }, function () {
+                showAlert(`${productName} removed from cart!`, 'warning');
+                updateCartDisplay();
+            });
+        }
+
+        // Clear cart function
+        $("#clear-cart").click(function () {
+            $.post("CartServlet", { clearCart: true }, function () {
+                showAlert("Cart cleared!", 'danger');
+                updateCartDisplay();
+            });
+        });
+
+        
+        function renderProducts(products) {
+            const productList = $('#product-list');
+            productList.empty();
+            products.forEach(product => {
+                const productCard = `
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="${product.imageUrl}" alt="${product.name}" class="card-img-top">
+                            <div class="card-body">
+                                <h3 class="card-title">${product.name}</h3>
+                                <p><strong>Price:</strong> $${product.price.toFixed(2)}</p>
+                                <button onclick="addToCart('${product.name}', ${product.price})" class="btn btn-primary">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                productList.append(productCard);
+            });
+        }
+        
+        
+        // Update cart display function
+        function updateCartDisplay() {
+            $.get("CartServlet", function (response) {
+                let cartElement = $("#cart-items");
+                let total = 0;
+                cartElement.empty();
+                response.forEach(item => {
+                    total += item.price * item.quantity;
+                    cartElement.append(`
+                        <li class="cart-item">
+                            ${item.productName} - ₹${item.price} x ${item.quantity}
+                            <button class="remove-btn" onclick="removeFromCart('${item.productName}')">Remove</button>
+                        </li>
+                    `);
+                });
+                $("#total-price").text(total.toFixed(2));
+            }, "json");
+        }
+
+        // View cart function
+        function viewCart() {
+            $("#main-content").addClass("d-none");
+            $("#cart-section").removeClass("d-none");
+            $("#product-list-container").addClass("d-none");
+            $("#order-section").addClass("d-none");
+        }
+
+        // Fetch products function
+        function fetchProducts() {
+            $("#main-content").addClass("d-none");
+            $("#product-list-container").removeClass("d-none");
+            $("#cart-section").addClass("d-none");
+            $("#order-section").addClass("d-none");
+
+            $.ajax({
+                url: "ProductListServlet",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    let tableBody = $("#productTableBody");
+                    tableBody.empty();
+                    data.forEach(product => {
+                        tableBody.append(`
+                            <tr>
+                                <td class="product-id">${product.ProductID}</td>
+                                <td>${product.ProductName}</td>
+                                <td>${product.Price.toFixed(2)}</td>
+                                <td>${product.Quantity}</td>
+                                <td>${product.ExpireDate}</td>
+                            </tr>
+                        `);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        }
+
+        // Render products on page load
+        $(document).ready(function () {
+            $.ajax({
+                url: 'products',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    renderProducts(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching products:', error);
+                }
+            });
+        });
+
+     // Orders display function
+        function loadOrders() {
+            $("#main-content").addClass("d-none");
+            $("#product-list-container").addClass("d-none");
+            $("#cart-section").addClass("d-none");
+            $("#order-section").removeClass("d-none");
+
+            $.ajax({
+                url: "OrderNowServlet",
+                type: "GET",
+                dataType: "json",
+                success: function (orders) {
+                    let orderTable = $("#orderTableBody");
+                    orderTable.empty();
+
+                    // Store orders length in a variable
+                    let hasOrders = orders.length > 0;
+
+                    orders.forEach(order => {
+                        let totalPrice = order.price * order.quantity; // Calculate total price
+                        orderTable.append(`
+                            <tr>
+                                <td>${order.id}</td>
+                                <td>${order.productName}</td>
+                                <td>₹${order.price.toFixed(2)}</td>
+                                <td>${order.quantity}</td>
+                                <td>₹${totalPrice.toFixed(2)}</td>
+                            </tr>
+                        `);
+                    });
+
+                    // Pay Now button click event
+                    $("#pay-now").off("click").on("click", function () {
+                        if (hasOrders) {
+                            showOrderSuccessMessage();
+                        } else {
+                            showEmptyCartAlert();
+                        }
+                    });
+                },
+                error: function () {
+                    alert("Failed to fetch order data!");
+                }
+            });
+        }
+
+        // Function to show order success message
+        function showOrderSuccessMessage() {
+            $("#order-success").removeClass("d-none");
+            setTimeout(function () {
+                $("#order-success").addClass("d-none"); // Hide success message after 5 seconds
+            }, 5000);
+        }
+
+        // Function to show an alert when trying to pay with an empty cart
+        function showEmptyCartAlert() {
+            $("#order-alert").removeClass("d-none").html(`
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Your cart is empty! Please buy a product from the dashboard before proceeding to payment.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `);
+        }
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
